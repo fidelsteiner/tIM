@@ -1,0 +1,68 @@
+!DATASET DESCRIPTION
+Name: tGISM - terrestrial Greenland Ice Margin (including ice sheet, ice caps and peripheral glaciers)
+Description: Accompanying data to publication in review, including geospatial data per subbasin, allowing for extraction of ice margin statistics for individual 1km sections (grid cells) of the margin.
+Author: J.Steiner - jff.steiner@gmail.com
+DOI: XXXX
+
+------------
+
+Folders: 
+- Code: includes commented code that allows to extract statistics from ArcticDEM data for each subbasin
+- SubbasinGeoSpatialData: 
+
+Naming of subbasins follows the numbers of ice sheet subbasins from Mouginot and Rignot (2019) (https://datadryad.org/stash/dataset/doi:10.7280/D1WT11). The peripheral glaciers were grouped according to Figure S2, and numbered starting from 300 to 315. Multiple subbasins were removed for a variety of reasons, detailed below.
+
+-- Input: Geospatial data needed for processing. Original Bedmachine data, ArcticDEM data and margin outlines are not provided here but can be accessed from the respective publications.
+--- ArcticDEMTiles.csv lists all names of tiles used in this study.
+---SectorMargins: individual polylines along the margin for each subbasin
+---SectorBuffers: individual polygons with 100m across the margin for each subbasin
+---Lakes: adapted lakes outlines based on How et al. 2021
+
+-- Output: 
+
+---greenlandwide_margins:
+.shp files for margin ending on land (terrestrialmargin.shp), in the ocean (marinemargin.shp) and in lakes (lakemargin.shp) for all of Greenland.
+
+---greenlandwide_morphology:
+.shp files mapping, for the GrIS and PGIC separately, the part of the terrestrial margin identified as 'near-vertical' (RegionalCliffMargin_GrIS.shp/RegionalCliffMargin_PGIC.shp), 'steep' (RegionalSteepMargin_GrIS.shp/RegionalSteepMargin_PGIC.shp), 'shallow' (RegionalShallowMargin_GrIS.shp/RegionalShallowMargin_PGIC.shp). Margin earlier identified as erroneous is also stored (RegionalErrorMargin_GrIS.shp/RegionalErrorMargin_PGIC.shp).
+---Sectors:Separate folders for each subbasin.
+
+Each folder for subbasin XXX includes a .shp file with the terrestrial margin (NNNterrestrialmargin.shp), the marine-terminating margin (NNNmarinemargin.shp), the lake terminating margin (NNNlakemmargin.shp), the margin that is adjacent to peripheral glaciers (or for the case of peripheral glaciers, the ice sheet; NNNperipheralconnector.shp), as well as a NNNGrid.shp file, which maps the grid used to cut the margin into equal pieces for processing. The IDs of the grid correspond to the lines in 'slopePercentiles.csv', which stores the 5th to 95th slope percentiles for each grid cell, and the total of all cells in the last line. The 'type' variable of the NNNGrid.shp identify the type of margin with '1' being 'near-vertical', '4' 'near-vertical' over steep terrain, '2' being 'steep', '3' being 'shallow', '5' being discarded from the analysis because of the bed topography below on average >30°, '6' being discarded because of erroneous margin or insufficient data (<1000 pixels).  
+
+Additionally a 'NNN_offmargin.csv' file stores all grid cells with margin considered erroneous. The file 'NNNArcticDEMTiles.txt' stores file names of all ArcticDEM tiles used for the subbasin. 
+
+
+
+
+
+
+Subbasins removed from analysis: 
+
+Subbasins 99, 101, 149, 150, 152, 153, 154, 155, 156, 157, 158, 177, 178, 179, 181, 184, 205, 206, 226, 228, 234, 235, 253, 254, 257, 259 have no ice sheet margin
+Subbasin 260 is completely covered by other subbasin margins or the peripheral ice caps and is removed.
+Subbasins 198, 236 and 259 only have connecting margins to peripheral glaciers.
+Subbasin 2 only has margins to peripheral glaciers, which were merged into adjacent subbasins 74 and 76.
+Subbasin 66 only has margins to peripheral glaciers, which were merged into adjacent subbasin 117.
+Subbasin 116 only has margins to peripheral glaciers, which were merged into adjacent subbasin 118.
+Subbasin 123 only has margins to peripheral glaciers, which were merged into adjacent subbasin 122.
+Subbasin 143 only has margins to peripheral glaciers, which were merged into adjacent subbasins 142 and 144.
+Subbasin 171 only has margins to peripheral glaciers, which were merged into adjacent subbasin 172.
+Subbasin 226 has a very short margin (and like 227 to 229 is a subbasin for ice caps), that was merged with the adjacent subbasin 18.
+Subbasins 227 and 229 predominately have margins to peripheral glaciers, which were merged to respective adjacent basins across their vast area.
+Subbasin 97 has a short margin to the peripheral glaciers, which was merged with subbasin 249.
+Subbasin 98 has a short margin to the peripheral glaciers, which was merged with subbasin 74.
+Subbasins 183, 241 and 242 have only very short margins not directly adjacent to peripheral glaciers and were all completely merged with subbasin 240.
+Subbasin 194 is likely erroneous and the 7km margin has been merged to subbasin 195. 
+Subbasin 91 has predominately margins with peripheral glaciers and less than 10km margin, and all sections were merged into adjacent subbasins 209 and 210 respectively.
+Subbasin 79 has predominately margins with peripheral glaciers, and all sections were merged into adjacent subbasin 125.
+Subbasin 89 has predominately margins with peripheral glaciers, and all sections were merged into adjacent subbasin 121.
+Subbasin 90 has predominately margins with peripheral glaciers, and all sections were merged into adjacent subbasins 125 and 193.
+Subbasin 256 has predominately margins with peripheral glaciers, and all sections were merged into adjacent subbasins 255, 248 and 95.
+
+Subbasin 112 has predominately margins with peripheral glaciers and less than 10km margin, and all sections were merged into adjacent subbasins 113 and 120 respectively.
+Subbasin 182 has less than 10km margin, and all sections were merged into adjacent subbasin 49.
+Subbasin 173 has less than 10km margin, and all sections were merged into adjacent subbasins 174 and 172.
+Subbasin 124 has only margins with peripheral glaciers and all sections were merged into adjacent subbasins 149 and 95 respectively.
+Subbasin 230 is covered in subbasins 3, 4 and 85 respectively.
+Subbasin 232 was merged with 237.
+
