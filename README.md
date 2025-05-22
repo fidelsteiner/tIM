@@ -6,9 +6,11 @@ The repository is updated, respective stable compilations to associated publicat
 
 'The terrestrial ice margin morphology in Kalaallit Nunaat (Greenland)', DOI: XXXX (publication), XXXX (Dataset) - associated ReadMe: 'MetaData_tGISM.txt'
 
- ![alt text](https://github.com/fidelsteiner/tIM/blob/main/P8298430.JPG?raw=true | height=48px)
+ ![alt text](https://github.com/fidelsteiner/tIM/blob/main/P8298430.JPG?raw=true)
+ <img src="https://github.com/fidelsteiner/tIM/blob/main/P8298430.JPG" width=50% height=50%>
 
 contributors: Jakob Abermann, Jakob Steiner, Rainer Prinz
 
-Overview of output datasets
+Overview of input (A-C) and output (D-F) datasets:
+
   ![alt text](https://github.com/fidelsteiner/tIM/blob/main/FigureS5.jpg?raw=true)
