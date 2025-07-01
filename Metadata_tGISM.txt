@@ -21,11 +21,11 @@ Naming of subbasins follows the numbers of ice sheet subbasins from Mouginot and
 -- Output: 
 
 ---greenlandwide_margins:
-.shp files for margin ending on land (terrestrialmargin.shp), in the ocean (marinemargin.shp) and in lakes (lakemargin.shp) for all of Greenland.
+.gpkg files containing margin ending on land (Land_Margin), in the ocean (Marine_Margin) and in lakes (Lake_Margin) for all of Greenland, as well as for erroneous margin (Error_Margin).
 
 ---greenlandwide_morphology:
-.shp files mapping, for the GrIS and PGIC separately, the part of the terrestrial margin identified as 'near-vertical' (RegionalCliffMargin_GrIS.shp/RegionalCliffMargin_PGIC.shp), 'steep' (RegionalSteepMargin_GrIS.shp/RegionalSteepMargin_PGIC.shp), 'shallow' (RegionalShallowMargin_GrIS.shp/RegionalShallowMargin_PGIC.shp). Margin earlier identified as erroneous is also stored (RegionalErrorMargin_GrIS.shp/RegionalErrorMargin_PGIC.shp).
----Sectors:Separate folders for each subbasin.
+.gpkg files mapping, for the GrIS and PGIC separately, the part of the land-terminating margin identified as 'near-vertical' (including separate polygons for margin on steep and shallow terrain, see manuscript), 'steep', 'shallow'.
+---Sectors: Separate folders for each subbasin, stored per region.
 
 Each folder for subbasin XXX includes a .shp file with the terrestrial margin (NNNterrestrialmargin.shp), the marine-terminating margin (NNNmarinemargin.shp), the lake terminating margin (NNNlakemmargin.shp), the margin that is adjacent to peripheral glaciers (or for the case of peripheral glaciers, the ice sheet; NNNperipheralconnector.shp), as well as a NNNGrid.shp file, which maps the grid used to cut the margin into equal pieces for processing. The IDs of the grid correspond to the lines in 'slopePercentiles.csv', which stores the 5th to 95th slope percentiles for each grid cell, and the total of all cells in the last line. The 'type' variable of the NNNGrid.shp identify the type of margin with '1' being 'near-vertical', '4' 'near-vertical' over steep terrain, '2' being 'steep', '3' being 'shallow', '5' being discarded from the analysis because of the bed topography below on average >30°, '6' being discarded because of erroneous margin or insufficient data (<1000 pixels).  
 
