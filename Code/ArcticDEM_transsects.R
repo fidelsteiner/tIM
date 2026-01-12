@@ -164,3 +164,76 @@ abline(v=seq(0,max(transect_steps),100),h=seq(round(min(transall[,2])),round(max
 dev.off()
 }
 }
+
+
+
+# Review Validation
+
+# Validation transsects
+validationTS <- 'C:\\Work\\Research\\tGISM\\MarginValidation\\ArcticDEMValidation\\Transects\\ReviewTransects'
+SectorCount <- list.dirs(validationTS,full.names = F)
+
+for(k in 1:length(SectorCount)){
+  SecFolder <- strsplit(list.files(validationTS)[k],'S')
+  secNum <- as.numeric(SecFolder[[1]][1])
+  
+  
+  DEMfiles <- unlist(read.table(paste('E:\\tGISM\\Sectors\\',secNum,'Sector\\',secNum,'ArcticDEMTiles.txt',sep='')))
+  
+  allTs <- list.files(paste(validationTS,'\\',secNum,'Sector',sep=''),pattern = '*.shp', full.names=T)
+  popOgr <- ogrInfo(paste(output_basepath,'\\Sectors\\SectorBuffers_nuna\\buffertempmarginSector',secNum,'.shp',sep = ""))
+  margin_buf <- readOGR(dsn=paste(output_basepath,'\\Sectors\\SectorBuffers_nuna',sep = ""),layer = popOgr$layer)
+  margin_con <- SpatialPolygons(margin_buf@polygons,proj4string=margin_buf@proj4string)
+  
+  for(i in 1 :length(allTs)){
+    popOgr <- ogrInfo(allTs[i])
+    trans_long <- readOGR(dsn=allTs[i],layer = popOgr$layer)
+    trans_long <- spTransform(trans_long,CRSobj = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs')
+    trans_short <- gIntersection(trans_long,margin_con)
+    
+    DEMmerged <- raster(res = 2, crs = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs')
+    DEMveclist <- vector()
+    for(dk in 1:length(DEMfiles)){
+      demdummy <- raster(DEMfiles[dk])
+      if(gIntersects(trans_long,as(extent(demdummy), "SpatialPolygons"))){
+        #Sys.sleep()
+        DEMveclist <- c(DEMveclist, dk)
+      }
+    }
+    for(dk in 1:length(DEMveclist)){
+      if(dk==1){DEMmerged <- crop(raster(DEMfiles[DEMveclist[dk]]),extent(trans_long))
+      }else{DEMmerged <- merge(DEMmerged,crop(raster(DEMfiles[DEMveclist[dk]]),extent(trans_long)))}
+      
+    }
+    
+    
+    
+    transall <- extract(DEMmerged,trans_long,cellnumbers = T)[[1]]
+
+    transall_coords <- xyFromCell(DEMmerged, transall[,1]) 
+    
+    df <- data.frame(id = c(1), x_origin =transall_coords[1,1], y_origin = transall_coords[1,2], x_dest =transall_coords[length(transall_coords[,1]),1], y_dest=transall_coords[length(transall_coords[,1]),2]) 
+    origin <- st_as_sf(df, coords = c("x_origin", "y_origin"), crs='+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs' )
+    dest <- st_as_sf(df, coords = c("x_dest", "y_dest"), crs='+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs' )
+    transect_distances <- c(0,st_distance(origin, dest,  by_element = TRUE ))
+    transect_steps <- seq(1, transect_distances[2], transect_distances[2]/length(transall[,2]))
+    
+    transmargin <- extract(DEMmerged,trans_short,cellnumbers = T)
+    idMatch <- match(coordinates(transmargin)[,1],coordinates(transall)[,1])
+    coords <- cbind(coordinates(DEMmerged)[coordinates(transmargin)[,1],1],coordinates(DEMmerged)[coordinates(transmargin)[,1],2])
+    transmarg <- unlist(extract(DEMmerged,trans_long)) * NA
+    transmarg[idMatch] <- unlist(extract(DEMmerged,trans_short))
+    
+    png(file=paste('C:\\Work\\Research\\tGISM\\MarginValidation\\ArcticDEMValidation\\Figures2\\',secNum,'_',i,'.png',sep=''), res = 300,width=1800,height=800) 
+    par(mar = c(4, 4, 1, 1))
+    plot(transect_steps,transall[,2],type='l',lwd=2,xlab ='distance [m]',ylab = 'Elevation [m a.s.l.]',cex = 2,xaxs ='i',xaxt='n',yaxt='n')
+    points(transect_steps,transmarg, type='l', col='red',lwd=3)
+    axis(1, at = seq(0,max(transect_steps),100))
+    axis(2, at = seq(round(min(transall[,2])),round(max(transall[,2])),20))
+    abline(v=seq(0,max(transect_steps),100),h=seq(round(min(transall[,2])),round(max(transall[,2])),20),
+           lty = 2,      # Grid line type
+           col = "gray", # Grid line color
+           lwd = 0.5)      # Grid line width
+    dev.off()
+  }
+}
