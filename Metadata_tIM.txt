@@ -1,13 +1,19 @@
 !DATASET DESCRIPTION
-Name: tGISM - terrestrial Greenland Ice Margin (including ice sheet, ice caps and peripheral glaciers)
-Description: Accompanying data to publication in review, including geospatial data per subbasin, allowing for extraction of ice margin statistics for individual 1km sections (grid cells) of the margin.
+Name: tIM - terrestrial Greenland Ice Margin (including ice sheet, ice caps and peripheral glaciers)
+Description: Accompanying data to publication, including geospatial data per subbasin, allowing for extraction of ice margin statistics for individual 1km sections (grid cells) of the margin.
 Author: J.Steiner - jff.steiner@gmail.com
-DOI: XXXX
+DOI: 10.5194/egusphere-2025-2424
 
 ------------
 
 Folders: 
 - Code: includes commented code that allows to extract statistics from ArcticDEM data for each subbasin
+-- IceMarginExtractor.R - core code extracting margin segments and associated slope values across Greenland
+-- ArcticDEM_transsects.R - extracts elevational transects from ArcticDEM tiles for selected locations to validate the overall product
+-- IceMarginMorphologyExtractor.R - assigns defining morphologies for each grid cell across Greenland based on typical distribution functions of slopes on known sites and saves final geospatial data by region
+-- IceMarginSegmentPlots.R - plots statistics on margin lengths into doughnut plots for each region and saves final regional geospatial data
+-- maketIMOutput - compile data across sectors and subregions and save as single files for gpkgs
+
 - SubbasinGeoSpatialData: 
 
 Naming of subbasins follows the numbers of ice sheet subbasins from Mouginot and Rignot (2019) (https://datadryad.org/stash/dataset/doi:10.7280/D1WT11). The peripheral glaciers were grouped according to Figure S2, and numbered starting from 300 to 315. Multiple subbasins were removed for a variety of reasons, detailed below.
